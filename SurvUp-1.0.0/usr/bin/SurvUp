@@ -54,6 +54,7 @@ function SurvUp() {
 				sudo -v
 				sudo service apache2 $1
 				sudo service mysql $1
+				sudo service mariadb $1
 				sudo service webmin $1
 				exit
 
@@ -70,7 +71,7 @@ function SurvUp() {
 			
 				sudo -v
 			
-				services=( apache2 mysql webmin )
+				services=( apache2 mysql mariadb webmin )
 				for i in ${services[@]}; do
 					if systemctl is-active --quiet $i ; then
 						sudo service $i stop
