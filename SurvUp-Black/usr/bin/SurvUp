@@ -1,0 +1,144 @@
+#!/bin/bash
+# -vx
+clear
+
+###
+#
+#	SurvUp 1.0.1
+#
+#	Lead Author: Lee Hodson
+#	Donate: https://paypal.me/vr51
+#	Website: https://journalxtra.com/linux/survup
+#	This Release: 18th Aug 2018
+#	First Written: 18th Aug 2018
+#	First Release: 18th Aug 2018
+#
+#	Copyright 2018 SurvUp <https://journalxtra.com>
+#	License: GPL3
+#
+#	Programmer: Lee Hodson <journalxtra.com>, VR51 <vr51.com>
+#
+#	Use of this program is at your own risk
+#
+#	USE TO:
+#
+#	  Stop, Start or Restart Apache, MySQL and Webmin
+#
+#	TO RUN:
+#
+#		Click the task-bar / task manager icons to start, stop or restart the listed applications.
+#			Left-click the main icon to stop or start Apache2, MySQL and Webmin services. If they are running, they will stop. If they are stopped they will start.
+#			Right-click the main icon to choose specifically to start, stop, restart services, to see service status, or to view About.
+#
+###
+
+version='SurvUp 1.0.1'
+
+function SurvUp_run() {
+	# Check for terminal then run else just run program
+	tty -s
+	if test "$?" -ne 0 ; then
+		SurvUp_launch "$@"
+	else
+		SurvUp "$@"
+	fi
+	
+}
+
+function SurvUp() {
+
+	green=$(tput setaf 2)
+	normal=$(tput sgr0)
+
+		case $@ in
+
+			start|stop|restart|reload)
+
+				sudo -v
+
+				echo -e "${green}SERVICES ACTION: $1 ${normal}"
+				echo -e "\n${green} APACHE${normal}"
+				sudo service apache2 $1
+				echo -e "${green} MYSQL/MARIADB${normal}"
+				sudo service mysql $1
+				echo -e "${green} WEBMIN${normal}"
+				sudo service webmin $1
+				echo -e "\n${green}Press any key to close${normal}"
+				read a
+				exit
+
+			;;
+
+			status)
+
+				echo -e "${green}SERVICE STATUS${normal}"
+				echo -e "\n${green}APACHE${normal}"
+				service apache2 $1 | cat
+				echo -e "\n${green}MYSQL/MARIADB${normal}"
+				service mysql $1 | cat
+				echo -e "\n${green}WEBMIN${normal}"
+				service webmin $1 | cat
+				echo -e "\n${green}Press any key to close${normal}"
+				read a
+				exit
+
+			;;
+			
+			about)
+
+				echo -e "$version\n"
+				echo "Press any key to close"
+				read a
+				exit
+				
+			;;
+
+			*)
+			
+				sudo -v
+			
+				services=( apache2 mysql webmin )
+				for i in ${services[@]}; do
+					if systemctl is-active --quiet $i ; then
+						echo -e "${green}Stopping $i ${normal}\n"
+						sudo service $i stop
+					else
+						echo -e "${green}Starting $i ${normal}\n"
+						sudo service $i start
+					fi
+				done
+				exit
+
+			;;
+
+		esac
+
+}
+
+
+## launch terminal
+
+function SurvUp_launch() {
+
+	terminal=( konsole gnome-terminal x-terminal-emulator xdg-terminal terminator urxvt rxvt Eterm aterm roxterm xfce4-terminal termite lxterminal xterm )
+	for i in ${terminal[@]}; do
+		if command -v $i > /dev/null 2>&1; then
+			exec $i -e "$0" "$@"
+			# break
+		else
+			printf "\nUnable to automatically determine the correct terminal program to run e.g Console or Konsole. Please run this program from the command line.\n"
+			read something
+			exit 1
+		fi
+	done
+}
+
+## Boot
+
+SurvUp_run "$@"
+
+# Exit is at end of SurvUp_run()
+
+# FOR DEBUGGING
+
+# declare -p
