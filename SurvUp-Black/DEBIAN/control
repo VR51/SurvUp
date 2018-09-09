@@ -1,5 +1,5 @@
 Package: SurvUp
-Version: 1.0.1
+Version: 1.0.2
 Maintainer: Lee Hodson
 Architecture: all
 Description: Start or stop the Apache, MySQL (MariaDB) and Webmin services at the touch of a button.

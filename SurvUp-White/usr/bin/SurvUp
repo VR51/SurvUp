@@ -4,12 +4,12 @@ clear
 
 ###
 #
-#	SurvUp 1.0.1
+#	SurvUp 1.0.2
 #
 #	Lead Author: Lee Hodson
 #	Donate: https://paypal.me/vr51
 #	Website: https://journalxtra.com/linux/survup
-#	This Release: 18th Aug 2018
+#	This Release: 9th Sep 2018
 #	First Written: 18th Aug 2018
 #	First Release: 18th Aug 2018
 #
@@ -32,7 +32,8 @@ clear
 #
 ###
 
-version='SurvUp 1.0.1'
+version='SurvUp 1.0.2'
+n=5 # Countdown timeout
 
 function SurvUp_run() {
 	# Check for terminal then run else just run program
@@ -63,8 +64,8 @@ function SurvUp() {
 				sudo service mysql $1
 				echo -e "${green} WEBMIN${normal}"
 				sudo service webmin $1
-				echo -e "\n${green}Press any key to close${normal}"
-				read a
+				echo -e "\n${green}Press any key then Enter to exit${normal}"
+				while [ $n -ge 0 ]; do echo -ne "\b\b\b\b$n " ; read -t 1 input ; if [[ $input ]] ; then break ; fi ; let n=n-1 ; done ; exit
 				exit
 
 			;;
@@ -78,8 +79,8 @@ function SurvUp() {
 				service mysql $1 | cat
 				echo -e "\n${green}WEBMIN${normal}"
 				service webmin $1 | cat
-				echo -e "\n${green}Press any key to close${normal}"
-				read a
+				echo -e "\n${green}Press any key then Enter to exit${normal}"
+				while [ $n -ge 0 ]; do echo -ne "\b\b\b\b$n " ; read -t 1 input ; if [[ $input ]] ; then break ; fi ; let n=n-1 ; done ; exit
 				exit
 
 			;;
@@ -87,8 +88,8 @@ function SurvUp() {
 			about)
 
 				echo -e "$version\n"
-				echo "Press any key to close"
-				read a
+				echo "Press any key then Enter to exit"
+				while [ $n -ge 0 ]; do echo -ne "\b\b\b\b$n " ; read -t 1 input ; if [[ $input ]] ; then break ; fi ; let n=n-1 ; done ; exit
 				exit
 				
 			;;
@@ -107,7 +108,9 @@ function SurvUp() {
 						sudo service $i start
 					fi
 				done
-				exit
+
+				echo -e "\n${green}Press any key then Enter to exit${normal}"
+				while [ $n -ge 0 ]; do echo -ne "\b\b\b\b$n " ; read -t 1 input ; if [[ $input ]] ; then break ; fi ; let n=n-1 ; done ; exit
 
 			;;
 
@@ -128,7 +131,7 @@ function SurvUp_launch() {
 		else
 			printf "\nUnable to automatically determine the correct terminal program to run e.g Console or Konsole. Please run this program from the command line.\n"
 			read something
-			exit 1
+			while [ $n -ge 0 ]; do echo -ne "\b\b\b\b$n " ; read -t 1 input ; if [[ $input ]] ; then break ; fi ; let n=n-1 ; done ; exit 1
 		fi
 	done
 }

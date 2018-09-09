@@ -36,6 +36,8 @@ Rebuild the package with different icons or extra features. Edit the files in Su
 The debian SurvUp package template was created with the help of [softman package](https://github.com/VR51/softman) utility.
 
 # Changelog
+## 1.0.2
+-	Added 5 second countdown to exit timer.
 ## 1.0.1
 - Added status view option
 - Added information output for actions
